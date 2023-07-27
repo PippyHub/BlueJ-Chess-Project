@@ -23,7 +23,9 @@ public class newGame {
         Loader loader = new Loader();
         loader.loadFile(file);
         for (int piece = 0; piece < Loader.PIECE_AMOUNT; piece++) {
-            Board.pieceList(Loader.pX[piece], Loader.pY[piece], Loader.isBlack[piece], false, Loader.name[piece]);
+            if (Loader.name[piece] != null) {
+                Board.pieceList(Loader.pX[piece], Loader.pY[piece], Loader.isBlack[piece], false, Loader.name[piece]);
+            }
         } // Access the loaded values from the arrays
     }
 }

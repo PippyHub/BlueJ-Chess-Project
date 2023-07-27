@@ -19,7 +19,7 @@ public class Piece {
     private static boolean isBlackTurn;
     public static boolean checkmated;
     public static boolean winner;
-    public static boolean moveMade, checkMade, castleMade; // Used for notation
+    public static boolean moveMade, checkMade, castleMade, takeMade; // Used for notation
     public static String getName; // Used for notation
     public static int castlingDelta; // Used for notation
     public static Piece enPassantPawn;
@@ -38,6 +38,7 @@ public class Piece {
     }
     public void move(int pX, int pY) {
         moveMade = false;
+        takeMade = false;
         deltaX = pX - this.pX;
         deltaY = pY - this.pY;
         clickX = pX;
@@ -74,7 +75,10 @@ public class Piece {
     }
     public void pieceTake() {
         Piece take = Board.getPiece(clickX * SQR_SIZE, clickY * SQR_SIZE);
-        if (take != null) take.kill(); // Taking pieces
+        if (take != null) {
+            take.kill();
+            takeMade = true;
+        }// Taking pieces
     }
     public void kill() {
         if (enPassantPawn == this) enPassantPawn = null; // Reset en passant pawn if it is killed
@@ -138,6 +142,7 @@ public class Piece {
             }
             return false; // Castling is not valid
         }
+
         return Math.abs(deltaX) <= 1 && Math.abs(deltaY) <= 1; // King moves
     }
     public boolean resolveCheck() {

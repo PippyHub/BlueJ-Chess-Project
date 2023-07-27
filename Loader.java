@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Scanner;
 public class Loader {
     private static File load;
-    static final int PIECE_AMOUNT = 32;
+    static final int PIECE_AMOUNT = Board.SQR_SIZE / 2;
     static int[] pX;
     static int[] pY;
     static boolean[] isBlack;
