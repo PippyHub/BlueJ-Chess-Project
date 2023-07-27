@@ -47,15 +47,15 @@ public class Board extends JPanel implements ActionListener, MouseListener {
             }
         }
         for (Piece p: ps) {
-             int index = -1;
-             if(p.name.equalsIgnoreCase("queen")) index = 0;
-             if(p.name.equalsIgnoreCase("king")) index = 1;
-             if(p.name.equalsIgnoreCase("rook")) index = 2;
-             if(p.name.equalsIgnoreCase("knight")) index = 3;
-             if(p.name.equalsIgnoreCase("bishop")) index = 4;
-             if(p.name.equalsIgnoreCase("pawn")) index = 5;
-             if(!p.isBlack) index+=6;
-             g.drawImage(images[index], p.x, p.y, this);
+            int index = -1;
+            if(p.name.equalsIgnoreCase("queen")) index = 0;
+            if(p.name.equalsIgnoreCase("king")) index = 1;
+            if(p.name.equalsIgnoreCase("rook")) index = 2;
+            if(p.name.equalsIgnoreCase("knight")) index = 3;
+            if(p.name.equalsIgnoreCase("bishop")) index = 4;
+            if(p.name.equalsIgnoreCase("pawn")) index = 5;
+            if(!p.isBlack) index+=6;
+            g.drawImage(images[index], p.x, p.y, this);
         }
         if (Piece.checkmated) {
             int squareX = 300;
@@ -97,56 +97,50 @@ public class Board extends JPanel implements ActionListener, MouseListener {
         }
         return null;
     }
+    public void notation() { //Add notation after moving a piece
+        if (Piece.moveMade) {
+            String turn = Piece.saveTurn() ? "White" : "Black" + "\u200A";
+            Menu.updateTextArea(turn + "   ");
+            if (Piece.castleMade) {
+                if (Piece.castlingDelta > 0) Menu.updateTextArea("O-O");
+                else Menu.updateTextArea("O-O-O");
+            } else {
+                String firstChar;
+                if (Piece.getName.equalsIgnoreCase("knight")) {
+                    firstChar = String.valueOf(Character.toUpperCase(Piece.getName.charAt(1)));
+                } else if (Piece.getName.equalsIgnoreCase("pawn")) {
+                    firstChar = "";
+                } else {
+                    firstChar = String.valueOf(Character.toUpperCase(Piece.getName.charAt(0)));
+                }
+                Menu.updateTextArea(firstChar); //Print piece name e.g. K for king
+                char pieceX = (char) (selectedPiece.pX + 'a');
+                String pieceY = String.valueOf(SQR_AMOUNT - selectedPiece.pY);
+                if (Piece.takeMade) {
+                    if (Piece.getName.equalsIgnoreCase("pawn")) {
+                        Menu.updateTextArea(String.valueOf(pieceX));
+                    } //If pawn print what square its taking from
+                    Menu.updateTextArea("x"); //Print out if taking
+                }
+                Menu.updateTextArea(pieceX + pieceY); // Print rank and file e.g. e4
+                if (Piece.checkmated) Menu.updateTextArea("#"); //Print # if mate
+                else if (Piece.checkMade) Menu.updateTextArea("+"); //Print + if check
+            }
+            Menu.updateTextArea("\n");
+        }
+    }
     public void actionPerformed(ActionEvent e) {}
     public void mousePressed(MouseEvent e) {
         if (!Piece.checkmated) {
             if (selectedPiece == null) {
                 // No piece currently selected, attempt to select a piece
                 selectedPiece = getPiece(e.getX(), e.getY());
+                if (selectedPiece != null) if (selectedPiece.isBlack != Piece.saveTurn()) selectedPiece = null;
                 if (selectedPiece != null) highlight = true;
             } else {
                 // A piece is already selected, attempt to move it
                 selectedPiece.move(e.getX() / SQR_SIZE, e.getY() / SQR_SIZE);
-
-                //Add notation after moving a piece
-                if (Piece.moveMade) {
-                    String turn = Piece.saveTurn() ? "White" : "Black" + "\u200A";
-                    Menu.updateTextArea(turn + "   ");
-                    if (Piece.castleMade) {
-                        if (Piece.castlingDelta > 0) {
-                            Menu.updateTextArea("O-O");
-                        } else {
-                            Menu.updateTextArea("O-O-O");
-                        }
-                    } else {
-                        String firstChar;
-                        if (Piece.getName.equalsIgnoreCase("knight")) {
-                            firstChar = String.valueOf(Character.toUpperCase(Piece.getName.charAt(1)));
-                        } else if (Piece.getName.equalsIgnoreCase("pawn")) {
-                            firstChar = "";
-                        } else {
-                            firstChar = String.valueOf(Character.toUpperCase(Piece.getName.charAt(0)));
-                        }
-                        Menu.updateTextArea(firstChar); //Print piece name e.g. K for king
-
-                        char pieceX = (char) (selectedPiece.pX + 'a');
-                        String pieceY = String.valueOf(SQR_AMOUNT - selectedPiece.pY);
-
-                        if (Piece.takeMade) {
-                            if (Piece.getName.equalsIgnoreCase("pawn")) {
-                                Menu.updateTextArea(String.valueOf(pieceX));
-                            } //If pawn print what square its taking from
-                            Menu.updateTextArea("x"); //Print out if taking
-                        }
-
-                        Menu.updateTextArea(pieceX + pieceY); // Print rank and file e.g. e4
-
-                        if (Piece.checkmated) Menu.updateTextArea("#"); //Print # if mate
-                        else if (Piece.checkMade) Menu.updateTextArea("+"); //Print + if check
-
-                    }
-                    Menu.updateTextArea("\n");
-                }
+                notation();
                 highlight = false;
                 selectedPiece = null; // Deselect the piece after moving
             }
