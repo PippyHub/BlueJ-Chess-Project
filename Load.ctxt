@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=Load
+comment1.params=
+comment1.target=Load()
+comment2.params=
+comment2.target=void\ emptyBoardList()
+comment3.params=
+comment3.target=void\ resetVariables()
+comment4.params=
+comment4.target=void\ resetPieces()
+comment5.params=
+comment5.target=void\ loadTurn()
+numComments=6

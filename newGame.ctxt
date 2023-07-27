@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=newGame
+comment1.params=
+comment1.target=newGame()
+comment2.params=
+comment2.target=void\ clearing()
+comment3.params=
+comment3.target=void\ resetPieces()
+numComments=4

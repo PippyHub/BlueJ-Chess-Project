@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=Loader
+comment1.params=
+comment1.target=Loader()
+comment2.params=file
+comment2.target=void\ loadFile(java.io.File)
+comment3.params=file
+comment3.target=void\ loadTurn(java.io.File)
+comment4.params=
+comment4.target=void\ fileRead()
+numComments=5

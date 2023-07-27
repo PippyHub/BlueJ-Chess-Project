@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=Menu
+comment1.params=
+comment1.target=Menu()
+comment2.params=
+comment2.target=void\ contents()
+comment3.params=newText
+comment3.target=void\ updateTextArea(java.lang.String)
+comment4.params=
+comment4.target=void\ clearTextArea()
+comment5.params=e
+comment5.target=void\ actionPerformed(java.awt.event.ActionEvent)
+numComments=6

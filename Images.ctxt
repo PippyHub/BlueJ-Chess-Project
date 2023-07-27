@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=Images
+comment1.params=
+comment1.target=Images()
+comment2.params=
+comment2.target=java.awt.Image[]\ loadImages()
+numComments=3
