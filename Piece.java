@@ -138,14 +138,17 @@ public class Piece {
             }
             return false; // Castling is not valid
         }
-
         return Math.abs(deltaX) <= 1 && Math.abs(deltaY) <= 1; // King moves
     }
-
     public boolean resolveCheck() {
         this.tempSave();
         Piece attacker = getCheckingPiece();
-        boolean canDefend = attacker == attackedPiece && attacker != null;
+        boolean canDefend;
+        if (myKingInCheck()) {
+            canDefend = (attacker == attackedPiece && attacker != null);
+        } else {
+            canDefend = (attackedPiece != null);
+        }
         this.pX = this.clickX;
         this.pY = this.clickY;
         if (myKingInCheck() && !canDefend) {
