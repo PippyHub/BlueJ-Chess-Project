@@ -7,10 +7,15 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+
 public class Menu extends JFrame implements ActionListener {
     static final int BOARD_SIZE = Board.SQR_SIZE * Board.SQR_AMOUNT;
     public static Board panel = new Board();
     private static JTextArea textArea; // Declare the JTextArea
+    File defaultFile = new File("defaultPosition.txt");
+    File saveFile = new File("savePosition.txt");
+
     public Menu() {
         setTitle("Chess");
         this.getContentPane().setPreferredSize(new Dimension(BOARD_SIZE, BOARD_SIZE));
@@ -69,10 +74,10 @@ public class Menu extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String cmd=e.getActionCommand();
         switch (cmd) {
-            case "New" -> { new newGame(); clearTextArea(); Board.selectedPiece = null; }
-            case "Save" -> { if (!Piece.checkmated) new Save(Board.ps); else System.out.println("can't save checkmate"); }
-            case "Load" -> { new Load(); clearTextArea(); Board.selectedPiece = null; }
-            case "Clear" -> { newGame.clearing(); panel.repaint(); clearTextArea(); Board.selectedPiece = null; }
+            case "New" -> new Load(false, defaultFile);
+            case "Save" -> { if (Piece.state == Piece.State.ONGOING) new Save(Board.ps); }
+            case "Load" -> new Load(true, saveFile);
+            case "Clear" -> Load.clearing();
             default -> System.out.println("Invalid input");
         }
     }

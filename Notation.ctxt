@@ -1,0 +1,8 @@
+#BlueJ class context
+comment0.target=Notation
+comment0.text=\n\ Prints\ the\ notation\ into\ the\ text\ area\n\n\ @author\ (Piper\ Inns\ Hall)\n\ @version\ (16/07/2023)\n
+comment1.params=castle\ deltaX\ name\ pX\ pY\ take\ state\ checking
+comment1.target=Notation(boolean,\ int,\ Piece.Name,\ int,\ int,\ boolean,\ Piece.State,\ boolean)
+comment2.params=castle\ deltaX\ name\ pX\ pY\ take\ state\ checking
+comment2.target=void\ notate(boolean,\ int,\ Piece.Name,\ int,\ int,\ boolean,\ Piece.State,\ boolean)
+numComments=3

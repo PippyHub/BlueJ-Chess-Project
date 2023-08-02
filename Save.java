@@ -16,14 +16,14 @@ public class Save {
             FileWriter positionWrite = new FileWriter(position);
             for (Piece piece : ps) {
                 String line = piece.pX + "," + piece.pY + "," +
-                        piece.isBlack + "," + piece.pieceMoved + "," + piece.name + "\n";
+                        piece.color + "," + piece.pieceMoved + "," + piece.name + "\n";
                 positionWrite.write(line);
             }
             positionWrite.flush();
             positionWrite.close();
 
             FileWriter turnWrite = new FileWriter(turn);
-            turnWrite.write( Piece.saveTurn() + "");
+            turnWrite.write(Piece.getTurn().name());
             turnWrite.flush();
             turnWrite.close();
         } catch (IOException e) {

@@ -1,13 +1,11 @@
 #BlueJ class context
 comment0.target=Load
-comment1.params=
-comment1.target=Load()
+comment1.params=loadTurn\ file
+comment1.target=Load(boolean,\ java.io.File)
 comment2.params=
-comment2.target=void\ emptyBoardList()
-comment3.params=
-comment3.target=void\ resetVariables()
+comment2.target=void\ clearing()
+comment3.params=file
+comment3.target=void\ resetPieces(java.io.File)
 comment4.params=
-comment4.target=void\ resetPieces()
-comment5.params=
-comment5.target=void\ loadTurn()
-numComments=6
+comment4.target=void\ loadTurn()
+numComments=5

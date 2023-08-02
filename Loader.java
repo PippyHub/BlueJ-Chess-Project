@@ -8,49 +8,47 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 public class Loader {
-    private static File load;
-    static final int PIECE_AMOUNT = Board.SQR_SIZE / 2;
+    static final int PIECE_AMOUNT = Board.PIECE_AMOUNT;
     static int[] pX;
     static int[] pY;
-    static boolean[] isBlack;
+    static Piece.Color[] color;
     static boolean[] pieceMoved;
-    static String[] name;
-    static boolean turn;
+    static Piece.Name[] name;
+    static Piece.Color turn;
     public Loader() {
         pX = new int[PIECE_AMOUNT];
         pY = new int[PIECE_AMOUNT];
-        isBlack = new boolean[PIECE_AMOUNT];
+        color = new Piece.Color[PIECE_AMOUNT];
         pieceMoved = new boolean[PIECE_AMOUNT];
-        name = new String[PIECE_AMOUNT];
+        name = new Piece.Name[PIECE_AMOUNT];
     }
     public void loadFile(File file) {
-        load = file;
-        fileRead();
+        fileRead(file);
     }
     public void loadTurn(File file) {
         try {
             Scanner readFile = new Scanner(file);
             if (readFile.hasNextLine()) {
                 String lineRead = readFile.nextLine();
-                turn = Boolean.parseBoolean(lineRead);
+                turn = Piece.Color.valueOf(lineRead);
             }
             readFile.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public static void fileRead() {
+    public static void fileRead(File file) {
         try {
-            Scanner readFile = new Scanner(load);
+            Scanner readFile = new Scanner(file);
             for (int piece = 0; piece < PIECE_AMOUNT; piece++) {
                 if (readFile.hasNextLine()) {
                     String lineRead = readFile.nextLine();
                     String[] parts = lineRead.split(",");
                     pX[piece] = Integer.parseInt(parts[0]);
                     pY[piece] = Integer.parseInt(parts[1]);
-                    isBlack[piece] = Boolean.parseBoolean(parts[2]);
+                    color[piece] = Piece.Color.valueOf(parts[2]);
                     pieceMoved[piece] = Boolean.parseBoolean(parts[3]);
-                    name[piece] = parts[4];
+                    name[piece] = Piece.Name.valueOf(parts[4]);
                 } else break;
             }
             readFile.close();

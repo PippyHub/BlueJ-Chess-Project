@@ -12,6 +12,7 @@ public class Board extends JPanel implements ActionListener, MouseListener {
     static final int SQR_SIZE = 64;
     static final int SQR_AMOUNT = 8;
     static final int BOARD_SIZE = SQR_SIZE * SQR_AMOUNT;
+    static final int PIECE_AMOUNT = 32;
     public static LinkedList<Piece> ps = new LinkedList<>(); //linked list of pieces
     public static Piece selectedPiece = null;
     Images img = new Images();
@@ -21,8 +22,8 @@ public class Board extends JPanel implements ActionListener, MouseListener {
         images = img.loadImages();
         addMouseListener(this);
     }
-    public static void pieceList(int pX, int pY, boolean isBlack, boolean pieceMoved, String name) {
-        new Piece(pX, pY, isBlack, pieceMoved, name, ps);
+    public static void pieceList(int pX, int pY, Piece.Color color, boolean pieceMoved, Piece.Name name) {
+        new Piece(pX, pY, color, pieceMoved, name, ps);
     }
     public void paint(Graphics g) {
         boolean white = true;
@@ -42,22 +43,22 @@ public class Board extends JPanel implements ActionListener, MouseListener {
         if (highlight) {
             g.setColor(Color.yellow);
             if (selectedPiece != null){
-                if (selectedPiece.checkTurn())
-                    g.fillRect(selectedPiece.pX * SQR_SIZE, selectedPiece.pY * SQR_SIZE, SQR_SIZE, SQR_SIZE);
+                g.fillRect(selectedPiece.pX * SQR_SIZE, selectedPiece.pY * SQR_SIZE, SQR_SIZE, SQR_SIZE);
             }
         }
-        for (Piece p: ps) {
-            int index = -1;
-            if(p.name.equalsIgnoreCase("queen")) index = 0;
-            if(p.name.equalsIgnoreCase("king")) index = 1;
-            if(p.name.equalsIgnoreCase("rook")) index = 2;
-            if(p.name.equalsIgnoreCase("knight")) index = 3;
-            if(p.name.equalsIgnoreCase("bishop")) index = 4;
-            if(p.name.equalsIgnoreCase("pawn")) index = 5;
-            if(!p.isBlack) index+=6;
+        for (Piece p : ps) {
+            int index = switch (p.name) {
+                case QUEEN -> 0;
+                case KING -> 1;
+                case ROOK -> 2;
+                case KNIGHT -> 3;
+                case BISHOP -> 4;
+                case PAWN -> 5;
+            };
+            if (p.color == Piece.Color.WHITE) index += 6;
             g.drawImage(images[index], p.x, p.y, this);
         }
-        if (Piece.checkmated) {
+        if (Piece.state != Piece.State.ONGOING) {
             int squareX = 300;
             int squareY = 160;
             int centerX = (BOARD_SIZE - squareX) / 2;
@@ -73,13 +74,13 @@ public class Board extends JPanel implements ActionListener, MouseListener {
 
             g.setColor(Color.BLACK);
             g.setFont(new Font("Arial", Font.BOLD, 24));
-            String message = "Checkmate!";
+            String message =  Piece.state == Piece.State.CHECKMATE ? "Checkmate!" : "Stalemate!";
             int messageWidth = g.getFontMetrics().stringWidth(message);
             g.drawString(message, (BOARD_SIZE - messageWidth) / 2, centerY + squareY / 2 - 40);
 
             g.setFont(new Font("Arial", Font.PLAIN, 20));
-            String winner = Piece.winner ? "black" : "white";
-            message = winner + " has won";
+            String winner = Piece.getTurn() == Piece.Color.WHITE ? "black" : "white";
+            message = Piece.state == Piece.State.CHECKMATE ? winner + " has won" : winner + " has drawn";
             messageWidth = g.getFontMetrics().stringWidth(message);
             g.drawString(message, (BOARD_SIZE - messageWidth) / 2, centerY + squareY / 2 - 17);
 
@@ -97,50 +98,15 @@ public class Board extends JPanel implements ActionListener, MouseListener {
         }
         return null;
     }
-    public void notation() { //Add notation after moving a piece
-        if (Piece.moveMade) {
-            String turn = Piece.saveTurn() ? "White" : "Black" + "\u200A";
-            Menu.updateTextArea(turn + "   ");
-            if (Piece.castleMade) {
-                if (Piece.castlingDelta > 0) Menu.updateTextArea("O-O");
-                else Menu.updateTextArea("O-O-O");
-            } else {
-                String firstChar;
-                if (Piece.getName.equalsIgnoreCase("knight")) {
-                    firstChar = String.valueOf(Character.toUpperCase(Piece.getName.charAt(1)));
-                } else if (Piece.getName.equalsIgnoreCase("pawn")) {
-                    firstChar = "";
-                } else {
-                    firstChar = String.valueOf(Character.toUpperCase(Piece.getName.charAt(0)));
-                }
-                Menu.updateTextArea(firstChar); //Print piece name e.g. K for king
-                char pieceX = (char) (selectedPiece.pX + 'a');
-                String pieceY = String.valueOf(SQR_AMOUNT - selectedPiece.pY);
-                if (Piece.takeMade) {
-                    if (Piece.getName.equalsIgnoreCase("pawn")) {
-                        Menu.updateTextArea(String.valueOf(pieceX));
-                    } //If pawn print what square its taking from
-                    Menu.updateTextArea("x"); //Print out if taking
-                }
-                Menu.updateTextArea(pieceX + pieceY); // Print rank and file e.g. e4
-                if (Piece.checkmated) Menu.updateTextArea("#"); //Print # if mate
-                else if (Piece.checkMade) Menu.updateTextArea("+"); //Print + if check
-            }
-            Menu.updateTextArea("\n");
-        }
-    }
     public void actionPerformed(ActionEvent e) {}
     public void mousePressed(MouseEvent e) {
-        if (!Piece.checkmated) {
-            if (selectedPiece == null) {
-                // No piece currently selected, attempt to select a piece
+        if (Piece.state == Piece.State.ONGOING) {
+            if (selectedPiece == null) { // No piece currently selected, attempt to select a piece
                 selectedPiece = getPiece(e.getX(), e.getY());
-                if (selectedPiece != null) if (selectedPiece.isBlack != Piece.saveTurn()) selectedPiece = null;
+                if (selectedPiece != null) if (selectedPiece.color != Piece.getTurn()) selectedPiece = null;
                 if (selectedPiece != null) highlight = true;
-            } else {
-                // A piece is already selected, attempt to move it
+            } else { // A piece is already selected, attempt to move it
                 selectedPiece.move(e.getX() / SQR_SIZE, e.getY() / SQR_SIZE);
-                notation();
                 highlight = false;
                 selectedPiece = null; // Deselect the piece after moving
             }
