@@ -101,7 +101,6 @@ public class Piece {
             }
             return false; // Castling is not valid
         }
-
         return Math.abs(deltaX) <= 1 && Math.abs(deltaY) <= 1; // King moves
     } // King moves
     public boolean rookMove() {

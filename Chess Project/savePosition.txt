@@ -1,0 +1,5 @@
+4,7,WHITE,false,KING
+0,7,WHITE,false,ROOK
+7,0,WHITE,true,ROOK
+4,0,BLACK,false,KING
+0,0,BLACK,false,ROOK
