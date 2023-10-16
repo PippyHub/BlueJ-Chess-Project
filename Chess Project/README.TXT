@@ -1,4 +1,4 @@
-------------------------------------------------------------------------
+-------------------------------------------------------------------------
 PROJECT TITLE: Chess Game
 PURPOSE OF PROJECT:
     This project is a panel-based chess game that allows two players to play
@@ -31,4 +31,4 @@ USER INSTRUCTIONS:
             - Notation is cleared when Load or Clear is pressed.
 
     Enjoy your game of chess!
-------------------------------------------------------------------------
+-------------------------------------------------------------------------
