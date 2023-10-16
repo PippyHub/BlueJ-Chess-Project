@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------
 PROJECT TITLE: Chess Game
 PURPOSE OF PROJECT:
-    This project is a console-based chess game that allows two players to play
+    This project is a panel-based chess game that allows two players to play
     a standard game of chess. It provides a user-friendly interface for moving
     chess pieces, saving and loading game states, and reviewing move notations.
 
@@ -10,7 +10,7 @@ VERSION or DATE: v1.0 (October 16, 2023)
 HOW TO START THIS PROJECT:
     1. Ensure you have a compatible Java environment installed, preferabbly BlueJ
     2. Unzip the Chess-Project-BlueJ-Port zip file. 
-    3.
+    3. Select the 'Chess Project' file.
     4. Open this file inside of BlueJ as a project.
     5. Right click on Main and the click void main(String[] args) to run
 
